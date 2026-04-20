@@ -1,0 +1,41 @@
+
+networks:
+  linkvault_net:
+    driver: bridge
+
+volumes:
+  postgres_data:
+
+services:
+  db:
+    image: postgres:15
+    container_name: linkvault-db
+    networks:
+      - linkvault_net
+    environment:
+      POSTGRES_USER: link_user
+      POSTGRES_PASSWORD: link_pass
+      POSTGRES_DB: linkvault
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U link_user -d linkvault"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: linkvault-app
+    networks:
+      - linkvault_net
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_URL: postgres://linkuser:linkpass@db:5432/linkvault
+      FLASK_ENV: development
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    
