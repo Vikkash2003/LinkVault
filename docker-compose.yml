@@ -13,13 +13,13 @@ services:
     networks:
       - linkvault_net
     environment:
-      POSTGRES_USER: link_user
-      POSTGRES_PASSWORD: link_pass
+      POSTGRES_USER: linkuser
+      POSTGRES_PASSWORD: linkpass
       POSTGRES_DB: linkvault
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U link_user -d linkvault"]
+      test: ["CMD-SHELL", "pg_isready -U linkuser -d linkvault"]
       interval: 5s
       timeout: 5s
       retries: 5
