@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: 'LinkVault'
+    orgId: 1
+    folder: 'LinkVault'
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /etc/grafana/provisioning/dashboards

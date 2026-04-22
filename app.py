@@ -5,10 +5,14 @@ import time
 import psycopg2
 from flask import Flask, request, jsonify, redirect, abort
 from dotenv import load_dotenv
+from prometheus_flask_exporter import PrometheusMetrics    
+
 
 load_dotenv()
 
 app = Flask(__name__)
+metrics = PrometheusMetrics(app)                           
+metrics.info('app_info', 'LinkVault application info', version='1.0.0')  
 
 
 def get_db():
@@ -97,6 +101,11 @@ def redirect_url(code):
         abort(404)
 
     return redirect(result[0], code=302)
+
+
+@app.route('/', methods=['GET'])
+def index():
+    return jsonify({"message": "Welcome to LinkVault!"}), 200
 
 
 if __name__ == '__main__':
